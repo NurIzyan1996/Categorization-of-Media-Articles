@@ -6,9 +6,7 @@ Created on Thu May 19 10:46:55 2022
 """
 
 import re
-import os
 import json
-import pandas as pd
 import numpy as np
 import pickle
 from tensorflow.keras.preprocessing.text import Tokenizer

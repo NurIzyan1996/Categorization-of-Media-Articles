@@ -13,6 +13,7 @@ import numpy as np
 import datetime
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import TensorBoard
+from tensorflow.keras.utils import plot_model
 from modules import ExploratoryDataAnalysis,DataPreprocessing,ModelCreation,ModelEvaluation
 #%% PATHS
 URL = "https://raw.githubusercontent.com/susanli2016/PyCon-Canada-2019-NLP-Tutorial/master/bbc-text.csv"
@@ -56,13 +57,12 @@ temp = ([np.shape(i) for i in text])
 np.mean(temp) # get the mean for maxlen
 # Observation: the mean shape is 393.86, therefore, the maxlen is 400
 text = eda.text_pad_sequences(text, maxlen=400)
-#
+
 #%% STEP 5: Preprocessing
  
 # a) encode 'category' using One Hot Encoder approach
 data_pre = DataPreprocessing()
 category = data_pre.one_hot_encoder(category, OHE_SAVE_PATH)
-
 
 #%% STEP 6: Builing DL Model
 
@@ -85,7 +85,6 @@ nb_categories = np.shape(category)[1]
 model = mc.lstm_model(num_words, nb_categories, embedding_output=64,
                    nodes=64,dropout=0.2)
 
-from tensorflow.keras.utils import plot_model
 plot_model(model)
 
 model.compile(optimizer='adam',

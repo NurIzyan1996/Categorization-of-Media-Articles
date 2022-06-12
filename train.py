@@ -10,9 +10,6 @@ Politics.
 import os
 import pandas as pd
 import numpy as np
-import datetime
-from sklearn.model_selection import train_test_split
-from tensorflow.keras.callbacks import TensorBoard
 from tensorflow.keras.utils import plot_model
 from modules import ExploratoryDataAnalysis,DataPreprocessing,ModelCreation,ModelEvaluation
 #%% PATHS
@@ -68,54 +65,27 @@ category = data_pre.one_hot_encoder(category, OHE_SAVE_PATH)
 
 # a) split train & test data
 # X-text, Y-category
-X_train, X_test, y_train, y_test = train_test_split(text, category, 
-                                                    test_size=0.3, 
-                                                    random_state=123)
-
-# b) expand dimension into 3D array
-X_train = np.expand_dims(X_train,-1)
-X_test = np.expand_dims(X_test,-1)
-
-# c) LSTM Model
-
 mc = ModelCreation()
+X_train, X_test, y_train, y_test = mc.split_data(text, category)
 
+# b) LSTM Model
 num_words = 10000
 nb_categories = np.shape(category)[1]
 model = mc.lstm_model(num_words, nb_categories, embedding_output=64,
-                   nodes=64,dropout=0.2)
-
+                      nodes=64,dropout=0.2)
 plot_model(model)
 
-model.compile(optimizer='adam',
-              loss='categorical_crossentropy', 
-              metrics='acc')
-
-log_files = os.path.join(LOG_PATH, 
-                             datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))
-
-tensorboard_callback = TensorBoard(log_dir=log_files, histogram_freq=1)
-
-hist = model.fit(X_train, y_train, epochs=10,
-                 validation_data=(X_test,y_test), 
-                 callbacks=tensorboard_callback)
+# c) train the model
+mc.train_model(LOG_PATH,model,X_train,y_train,X_test,y_test,epochs=10)
 
 #%% STEP 7: Model Evaluation
 
-predicted_y = np.empty([len(X_test), nb_categories])
-
-for index, test in enumerate(X_test):
-    predicted_y[index,:] = model.predict(np.expand_dims(test, axis=0))
-
-#%% STEP 8: Model analysis
-y_pred = np.argmax(predicted_y, axis=1)
-y_true = np.argmax(y_test, axis=1)
-
 me = ModelEvaluation()
+y_true, y_pred = me.predict_model(model,X_test,y_test,nb_categories)
 me.report_metrics(y_true,y_pred)
 
 #%%
-# STEP 9: Model Deployment
+# STEP 8: Model Deployment
 model.save(MODEL_SAVE_PATH)
 
 

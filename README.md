@@ -33,9 +33,9 @@ module.py contains the codes where there are class and functions to be used in t
 # Discussion
 Based on the assignment given, we are required to create a deep learning model with accuracy 70%. I have succcessfully produce an LSTM model that produces 95% accuracy.
 
-In my opinion, I am able to obtain a very high accuracy beacause the dataset is a very high quality data thus the data cleaning and model training processes go smoothly with less obstacles. At first I trained the model with 5 epochs and obtained the accuracy at 89%. Then I increase the epochs up to 10 and obtain 95% accuracy score. 
+In my opinion, I am able to obtain a very high accuracy because the dataset is a very high quality data thus the data cleaning and model training processes go smoothly with less obstacles. At first I trained the model with 5 epochs and obtained the accuracy at 89%. Then I increase the epochs up to 10 and obtain 95% accuracy score. 
 
-In conclusion, the performance of the deep learning model that i build is highly satisfying. In the future, the deployment of this model may assist monitoring the market trends efficiently and accurately, thus influencing the investment flows.
+In conclusion, the performance of the deep learning model that i build is highly satisfying. In the future, the deployment of this model may assist monitoring the market trends efficiently and accurately, thus influencing the future investment flows.
 
 # Credit
 Big thanks to the owner of our dataset https://raw.githubusercontent.com/susanli2016/PyCon-Canada-2019-NLP-Tutorial/master/bbc-text.csv
